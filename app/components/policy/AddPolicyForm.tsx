@@ -1,7 +1,8 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useCallback } from 'react'
-import PolicyAPI from '@/lib/api/policyApi'
 import {v4 as uuid} from 'uuid'
+
+import PolicyAPI from '@/lib/api/policyApi'
 
 type AddPolicyForm = {
   isOpen: boolean;
@@ -44,8 +45,7 @@ export default function AddPolicyForm({isOpen, onClose}: AddPolicyForm) {
                   </DialogTitle>
                   <div className="mt-2 mb-2">
                     <p className="text-sm text-gray-500">
-                      Are you sure you want to deactivate your account? All of your data will be permanently removed.
-                      This action cannot be undone.
+                      Provide policy name and body. Policy will be used to evaluate against incoming requests. You will be able to edit the policy later.
                     </p>
                   </div>
                   <div className='mt-2'>
