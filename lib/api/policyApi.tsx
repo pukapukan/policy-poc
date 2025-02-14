@@ -87,4 +87,18 @@ export default class PolicyAPI {
     }
     return !!((await response.json())['success'])
   }
+
+  static async getDiff(id: string, baselineVersion: number, candidateVersion: number) {
+    const diffUrl = new URL(`${id}/diff`, POLICY_API_URL)
+    diffUrl.searchParams.append('baseline_version', baselineVersion.toString())
+    diffUrl.searchParams.append('candidate_version', candidateVersion.toString())
+
+    const response = await fetch(diffUrl)
+    if (!response.ok) {
+      throw new Error(`PolicyAPI.getDiff(id: ${id}, baseline: ${baselineVersion}, candidate: ${candidateVersion}) failed with status code: ${response.status}`)
+    }
+
+    const data = await response.json()
+    return data.diff as string
+  }
 }
