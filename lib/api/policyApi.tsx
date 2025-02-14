@@ -1,7 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://0.0.0.0:8000/'
 const POLICY_API_URL = new URL('policies/', BASE_URL)
 
-type PolicyRequest = {
+export type PolicyRequest = {
   name: string;
   body: [{
     type: "text",
@@ -46,6 +46,21 @@ export default class PolicyAPI {
     return new Policy(data)
   }
 
+  static async patch(id: string, request: PolicyRequest) {
+    const postUrl = new URL(id, POLICY_API_URL)
+    const response = await fetch(postUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request)
+    })
+    if (!response.ok) {
+      throw new Error(`PolicyAPI.patch(id: ${id}) failed with status code: ${response.status}`)
+    }
+    return new Policy(await response.json())
+  }
+
   static async list() {
     const response = await fetch(POLICY_API_URL)
     if (!response.ok) {
@@ -55,6 +70,7 @@ export default class PolicyAPI {
   }
 
   static async get(id: string, version?: number) {
+    version = version || 1
     const response = await fetch(new URL(`${id}/${version}`, POLICY_API_URL))
     if (!response.ok) {
       throw new Error(`PolicyAPI.get(id: ${id}, version: ${version}) failed with status code: ${response.status}`)
